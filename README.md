@@ -1,2 +1,33 @@
-# sparknlp-language-detection
-Identifying the language of written reviews. Part of a larger NLP project.
+# Language Detection with SparkNLP
+
+Load in text data 
+
+```
+
++----------+------+----------+-----------+-------------+--------------------+
+|listing_id|    id|      date|reviewer_id|reviewer_name|            comments|
++----------+------+----------+-----------+-------------+--------------------+
+|     17878| 64852|2010-07-15|     135370|          Tia|This apartment is...|
+|     17878| 76744|2010-08-11|      10206|         Mimi|we had a really g...|
+|     17878| 91074|2010-09-06|      80253|          Jan|Staying in Max ap...|
+|     17878|137528|2010-11-12|     230449|        Orene|In general very g...|
+|     17878|147594|2010-12-01|     219338|        David|The apt was nice ...|
++----------+------+----------+-----------+-------------+--------------------+
+
+```
+
+And add `language` column
+
+```
+
++----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
+|listing_id|    id|      date|reviewer_id|reviewer_name|            comments|            document|            language|
++----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
+|     17878| 64852|2010-07-15|     135370|          Tia|This apartment is...|[[document, 0, 39...|[[language, 0, 39...|
+|     17878| 76744|2010-08-11|      10206|         Mimi|we had a really g...|[[document, 0, 32...|[[language, 0, 32...|
+|     17878| 91074|2010-09-06|      80253|          Jan|Staying in Max ap...|[[document, 0, 38...|[[language, 0, 38...|
+|     17878|137528|2010-11-12|     230449|        Orene|In general very g...|[[document, 0, 52...|[[language, 0, 52...|
+|     17878|147594|2010-12-01|     219338|        David|The apt was nice ...|[[document, 0, 11...|[[language, 0, 11...|
++----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
+
+```
