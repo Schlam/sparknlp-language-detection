@@ -1,63 +1,55 @@
 # Language Detection with SparkNLP
 
-Scripts to load in text data from a csv file and add `language` column,
-which contains predictions and confidence values for 20 languages.
+Two notebooks are contained here. 
 
-A notebook is included that shows how this pipeline was built.
+**The first** shows an end-to-end cloud ETL pipeline on AWS
+(from S3 to RDS).
 
-You can also run from the command line with
 
-```
+**The second** shows how to predict the language
+of unlabeled text data using a pretrained model from
+[JohnSnowNLP](https://github.com/JohnSnowLabs/spark-nlp).
+I belive this is a BERT model trained in a language-agnostic
+on various NLI tasks, and later fine-tuned for language prediction.
+*See the **ideas** section for ideas for the AI/NLP aspect of this project.*
 
-pip install requirements.txt
-python detect_language.py
 
-```
+**The third** (currently unfinished) part provides an
+in-depth analysis of Airbnb data considering this new
+"language" feature. If you can reasonably associate language
+with a certian world region, the you could hopefully find answers like:
 
-Example input data:
+- Are international consumers a significant part of the usership in
+certain cities?
 
-```
+- Are certain listings better at attracting people whose primary
+language is not english?
 
-+----------+------+----------+-----------+-------------+--------------------+
-|listing_id|    id|      date|reviewer_id|reviewer_name|            comments|
-+----------+------+----------+-----------+-------------+--------------------+
-|     17878| 64852|2010-07-15|     135370|          Tia|This apartment is...|
-|     17878| 76744|2010-08-11|      10206|         Mimi|we had a really g...|
-|     17878| 91074|2010-09-06|      80253|          Jan|Staying in Max ap...|
-|     17878|137528|2010-11-12|     230449|        Orene|In general very g...|
-|     17878|147594|2010-12-01|     219338|        David|The apt was nice ...|
-+----------+------+----------+-----------+-------------+--------------------+
+- Are there patterns in sentiment across diffent languages/world regions?
 
-```
+This could power a number of design aspects at the platform level:
 
-How the results file will look
+- Rank listings show to a visiting user according to their primary language
+- Find listings that have extremely negative sentiment reviews
+and rank them lower
 
-```
+Finally, this data can also be used by investors that seek to use Airbnb
+as an alternative flow of income by informing certain questions:
 
-+----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
-|listing_id|    id|      date|reviewer_id|reviewer_name|            comments|            document|            language|
-+----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
-|     17878| 64852|2010-07-15|     135370|          Tia|This apartment is...|[[document, 0, 39...|[[language, 0, 39...|
-|     17878| 76744|2010-08-11|      10206|         Mimi|we had a really g...|[[document, 0, 32...|[[language, 0, 32...|
-|     17878| 91074|2010-09-06|      80253|          Jan|Staying in Max ap...|[[document, 0, 38...|[[language, 0, 38...|
-|     17878|137528|2010-11-12|     230449|        Orene|In general very g...|[[document, 0, 52...|[[language, 0, 52...|
-|     17878|147594|2010-12-01|     219338|        David|The apt was nice ...|[[document, 0, 11...|[[language, 0, 11...|
-+----------+------+----------+-----------+-------------+--------------------+--------------------+--------------------+
+- Are there differences in spending habits for international users?
+- Are there ways to name/describe your listing that make them appeal
+to a wider audience?
 
-```
+## Hardship
 
-Closer inspection of the language column
+Apparently, the sofware versions that play well
+with postgresql are not the same versions that
+play well with `sparknlp`. Combining the NLP pipeline with the
+visualization could be a way to avoid having to load language results
+back into postgres. However, that would be more of a patch than a fix, and
+would make the language data unretrievable.
 
-```
+### Ideas
 
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|language                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|[[language, 0, 396, en, [hr -> 8.8132457E-10, fr -> 5.0218325E-8, uk -> 1.048722E-7, pt -> 1.966427E-7, cs -> 3.9181973E-8, el -> 8.857998E-8, it -> 8.322347E-7, bg -> 2.5249047E-8, de -> 3.3974771E-7, ru -> 1.5472986E-8, sv -> 6.042574E-7, tr -> 1.1117493E-8, en -> 0.9999913, sk -> 4.5116842E-8, es -> 4.756644E-6, fi -> 8.54744E-9, ro -> 3.7395527E-9, no -> 8.9385344E-7, sentence -> 0, hu -> 6.6676558E-9, pl -> 7.601722E-7], []]]    |
-|[[language, 0, 325, en, [hr -> 1.2641242E-9, fr -> 7.89383E-8, uk -> 1.0512882E-7, pt -> 2.1824515E-7, cs -> 6.237736E-8, el -> 1.5953975E-7, it -> 1.0458278E-6, bg -> 4.422095E-8, de -> 3.807392E-7, ru -> 1.8176198E-8, sv -> 9.401717E-7, tr -> 1.5860639E-8, en -> 0.9999863, sk -> 4.357957E-8, es -> 8.304368E-6, fi -> 1.378948E-8, ro -> 6.0666685E-9, no -> 1.1837442E-6, sentence -> 0, hu -> 1.0774794E-8, pl -> 1.1550025E-6], []]]     |
-|[[language, 0, 382, en, [hr -> 7.792687E-9, fr -> 4.95762E-7, uk -> 3.9228104E-7, pt -> 3.216517E-7, cs -> 7.4589494E-8, el -> 3.4215392E-7, it -> 1.1127823E-5, bg -> 1.4134055E-7, de -> 4.3342862E-7, ru -> 1.5799113E-8, sv -> 4.9887876E-6, tr -> 3.413009E-8, en -> 0.99995625, sk -> 1.2010698E-7, es -> 1.50251335E-5, fi -> 6.509398E-8, ro -> 2.1302E-8, no -> 9.428204E-6, sentence -> 0, hu -> 2.2173403E-8, pl -> 7.384755E-7], []]]     |
-|[[language, 0, 526, en, [hr -> 5.1580544E-9, fr -> 1.5984654E-7, uk -> 4.1051183E-7, pt -> 2.6634294E-7, cs -> 7.207046E-8, el -> 3.992493E-7, it -> 6.9335347E-6, bg -> 1.0674164E-7, de -> 5.1453054E-7, ru -> 1.9400945E-8, sv -> 2.7112676E-6, tr -> 1.5662653E-8, en -> 0.9999695, sk -> 1.3458681E-7, es -> 1.0841513E-5, fi -> 1.9549304E-8, ro -> 1.4072458E-8, no -> 7.004642E-6, sentence -> 0, hu -> 1.1391856E-8, pl -> 9.805552E-7], []]]|
-|[[language, 0, 119, en, [hr -> 7.725529E-9, fr -> 1.6003358E-7, uk -> 4.6832332E-7, pt -> 1.7336427E-7, cs -> 2.746001E-7, el -> 1.5186329E-6, it -> 1.8334096E-6, bg -> 6.093568E-8, de -> 6.692198E-7, ru -> 6.945706E-8, sv -> 9.9249855E-6, tr -> 9.4475205E-8, en -> 0.99995255, sk -> 1.16654185E-7, es -> 2.4466266E-5, fi -> 9.0962736E-8, ro -> 3.8412157E-8, no -> 2.0149243E-6, sentence -> 0, hu -> 1.5306806E-8, pl -> 5.321021E-6], []]]|
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-```
+Use [LaBSE](https://ai.googleblog.com/2020/08/language-agnostic-bert-sentence.html) to generate more
+powerful analytics on the text data.
