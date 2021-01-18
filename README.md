@@ -29,7 +29,7 @@ language is not english?
 
 This could power a number of design aspects at the platform level:
 
-- Rank listings show to a visiting user according to their primary language
+- Rank listings shown to a visiting user according to their primary language
 - Find listings that have extremely negative sentiment reviews
 and rank them lower
 
@@ -40,16 +40,17 @@ as an alternative flow of income by informing certain questions:
 - Are there ways to name/describe your listing that make them appeal
 to a wider audience?
 
-## Hardship
+#### Hardship
 
-Apparently, the sofware versions that play well
+Apparently, the spark related software versions that play well
 with postgresql are not the same versions that
-play well with `sparknlp`. Combining the NLP pipeline with the
+play well with `sparknlp`. Having a hard time isolating
+the exact issue. Combining the NLP pipeline with the
 visualization could be a way to avoid having to load language results
 back into postgres. However, that would be more of a patch than a fix, and
 would make the language data unretrievable.
 
-### Ideas
+#### Ideas
 
 Use [LaBSE](https://ai.googleblog.com/2020/08/language-agnostic-bert-sentence.html) to generate more
 powerful analytics on the text data.
