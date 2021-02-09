@@ -31,11 +31,11 @@ in an S3 bucket, and loaded into a postgreSQL database on RDS using
 Predicting the language of user reviews using a pretrained model from
 [JohnSnowNLP](https://github.com/JohnSnowLabs/spark-nlp).
 
-I belive this is a BERT model trained in a language-agnostic
+I belive this is a BERT model trained in a language-agnostic way
 on various NLI tasks, and later fine-tuned for language prediction.
 
 Using a pretrained model was orders of magnitude faster than training one
-from scratch, and allows for more time to be spend thinking about *uses*
+from scratch, and allowed for more time to be spent thinking about *uses*
 of this result.
 
 Considering this new feature, if you can reasonably associate language
